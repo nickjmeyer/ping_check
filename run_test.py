@@ -100,7 +100,7 @@ if __name__ == "__main__":
     num_samples = 0
 
     while True:
-        time_to_sleep_s = (next_sample_time - last_sample_time).total_seconds()
+        time_to_sleep_s = (next_sample_time - get_now()).total_seconds()
         next_sample_time += sample_period_s
         time.sleep(max(time_to_sleep_s, 0))
 
@@ -142,4 +142,4 @@ if __name__ == "__main__":
         logger(f"         Uptime: {uptime}")
         logger("     Percentiles:")
         for i in range(12):
-            logger(f"                 {index_to_range(i)}: {(percentiles[i] / num_samples):.02}%")
+            logger(f"                 {index_to_range(i)}: {int((percentiles[i] / num_samples)*100):3}%")
