@@ -144,4 +144,4 @@ if __name__ == "__main__":
         logger(f"             Uptime: {uptime}")
         logger("         Percentiles:")
         for i in range(12):
-            logger(f"                     {index_to_range(i)}: {int((percentiles[i] / num_samples)*100):3}%")
+            logger(f"                     {index_to_range(i)}: {int((percentiles[i] / num_samples)*100):3}% ({percentiles[i]})")
