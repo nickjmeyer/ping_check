@@ -80,6 +80,7 @@ if __name__ == "__main__":
     window_s = as_seconds(30)
     sample_period_s = as_seconds(1)
     start_time = get_now()
+    last_failure = None
     last_sample_time = start_time
     next_sample_time  = last_sample_time + sample_period_s
 
@@ -107,6 +108,9 @@ if __name__ == "__main__":
         last_sample_time, result = get_sample()
 
         data.append((last_sample_time, result))
+        if not result:
+            last_failure = last_sample_time
+
         num_samples += 1
         with open(data_file_name, "a") as f:
             f.write(",".join(map(str, data[-1])))
@@ -133,14 +137,18 @@ if __name__ == "__main__":
 
         uptime = last_sample_time - start_time
 
+        raw_data = "".join("|" if i else "O" for _,i in data)[::-1]
+
         logger("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         logger(f"Current time: {last_sample_time}")
         logger(f"Network: {wifi_ssid}")
         logger(f"Connectivity data:")
+        logger(f"           Raw data: {raw_data}")
         logger(f"        Avg Success: {avg_success}")
         logger(f"              Count: {len(data)}")
         logger(f"        Min Success: {min_rate}")
         logger(f"        Total count: {num_samples}")
+        logger(f" Time since failure: {last_sample_time - last_failure if last_failure else 'N/A'}")
         logger(f"             Uptime: {uptime}")
         logger("         Percentiles:")
         for i in range(12):
